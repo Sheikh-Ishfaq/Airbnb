@@ -1,0 +1,119 @@
+body {
+  font-family: "Poppins", sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.navbar {
+  height: 5rem;
+  background-color: white;
+}
+.navbar a {
+  background-color: white;
+}
+.fa-compass {
+  color: #fe424d;
+  font-size: 2rem;
+}
+.nav-link {
+  color: #222222 !important;
+}
+
+/* FOOTER */
+
+.f-info-links a {
+  text-decoration: none;
+  color: #222222;
+}
+
+.f-info-links a:hover {
+  text-decoration: underline;
+}
+.f-info-social i {
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
+.f-info-links,
+.f-info-brand,
+.f-info-social {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.f-info {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+  height: 8rem;
+  background-color: #ebebeb;
+  align-items: space-evenly;
+}
+
+/* CARDS */
+.listing-card {
+  border: none !important;
+  margin-bottom: 2rem;
+}
+.card-img-top {
+  width: 100% !important;
+
+  border-radius: 1rem !important;
+  object-fit: cover !important;
+}
+.car-body {
+  padding: 0 !important;
+}
+.card-body {
+  padding: 0px !important;
+}
+.listing-link {
+  text-decoration: none;
+}
+
+.card-img-overlay {
+  opacity: 0;
+}
+.card-img-overlay:hover {
+  opacity: 0.2;
+  background-color: white;
+}
+
+/* NEW FORM */
+.container {
+  flex: 1;
+}
+.add-btn {
+  background-color: #fe424d !important;
+  border: none !important;
+}
+
+/* Edit FORM */
+.edit-btn {
+  background-color: #fe424d !important;
+  border: none !important;
+}
+
+/* SHOW LISTING */
+
+.show-img {
+  /* width: 60vh !important; */
+  height: 50vh !important;
+  /* border-radius: 0.7rem; */
+}
+.buttons {
+  display: flex;
+}
+.show-edit-btn {
+  margin-right: 2rem;
+  border: none;
+}
+.delete-btn {
+  background-color: #fe424d !important;
+  border: none !important;
+}
