@@ -12,17 +12,17 @@
         />
       </div>
       <div class="details">
-        <i>Owned by <b><%=data.owner.username%></b> </i>
-        <br />
-        <br />
-        <div class=""><%=data.description%></div>
-        <div class="">
-          &#8377; <%=data.price.toLocaleString("en-IN")%>/night
-        </div>
-        <div class=""><%=data.location%></div>
-        <div class="mb-3"><%=data.country%></div>
+       <p>Owned by <i><%=data.owner.username%> </i></p> 
+        
+       <p> <div class=""><%=data.description%></div></p>
+       <p> <div class="">
+          &#8377; <%=data.price.toLocaleString("en-IN")%>
+        </div></p>
+        <p><div class=""><%=data.location%></div></p>
+        <p><div class="mb-3"><%=data.country%></div></p>
       </div>
 
+      <%if(currUser && currUser._id.equals(data.owner._id)){%>
       <div class="buttons">
         <div class="show-edit-btn">
           <form method="get" action="/listings/<%=data._id%>/edit">
@@ -35,7 +35,9 @@
           </form>
         </div>
       </div>
+      <%}%>
       <hr />
+     <%if(currUser){%>
       <div>
         <h4>Leave a review.</h4>
         <form
@@ -72,14 +74,15 @@
           <button class="btn btn-outline-dark">Submit</button>
         </form>
       </div>
+      <%}%>
       <% if(data.reviews.length){%>
-      <hr />
+      
       <div class="row mt-3">
         <p><b>All Reviews</b></p>
         <%for(review of data.reviews){%>
         <div class="card col-5 ms-2 mb-2">
           <div class="card-body">
-            <h5 class="card-title">Jane Doe</h5>
+            <h5 class="card-title">@<%=review.author.username%></h5>
             <p class="card-text"><%=review.comment%></p>
             <p class="card-text"><%=review.rating%> Star</p>
             <form

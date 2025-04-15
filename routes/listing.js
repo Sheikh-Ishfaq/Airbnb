@@ -4,8 +4,8 @@ const listing = require("../models/listing.js");
 const ExpressError = require("../util/ExpressError.js");
 const wrapAsync = require("../util/wrapAsync.js");
 const review = require("../models/review");
-const { listingSchema } = require("../schema.js");
-const { isLoggedIn } = require("../middleware.js");
+const { listingSchema, reviewSchema } = require("../schema.js");
+const { isLoggedIn, isOwner } = require("../middleware.js");
 
 const validateListing = (req, res, next) => {
   let { error } = listingSchema.validate(req.body);
@@ -49,7 +49,10 @@ router.get(
   "/:id",
   wrapAsync(async (req, res) => {
     let { id } = req.params;
-    let data = await listing.findById(id).populate("reviews").populate("owner");
+    let data = await listing
+      .findById(id)
+      .populate({ path: "reviews", populate: { path: "author" } })
+      .populate("owner");
     if (!data) {
       req.flash("failure", "Listing does not exist");
       res.redirect("/listings");
@@ -63,6 +66,7 @@ router.get(
 router.get(
   "/:id/edit",
   isLoggedIn,
+  isOwner,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let obj = await listing.findById(id);
@@ -78,6 +82,7 @@ router.get(
 router.patch(
   "/:id",
   validateListing,
+  isOwner,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let obj = await listing.findById(id);
@@ -92,6 +97,7 @@ router.patch(
 router.delete(
   "/:id",
   isLoggedIn,
+  isOwner,
   wrapAsync(async (req, res) => {
     let { id } = req.params;
     let deleted = await listing.findByIdAndDelete(id);
