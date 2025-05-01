@@ -1,2 +1,2 @@
-# Airbnb
-Airbnb is an online marketplace that connects people looking to rent out their homes with travelers seeking accommodations. It offers unique stays in over 220 countries, ranging from apartments and houses to cabins and luxury villas.
+Airbnb Website Clone:
+This project is a replica of the Airbnb platform, designed to allow users to browse, list, and book unique accommodations around the world. It features user authentication, property listings, search and filter options, booking functionality, and a responsive user interface.
