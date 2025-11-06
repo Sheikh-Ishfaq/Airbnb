@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
+}
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -8,6 +12,7 @@ const ExpressError = require("./util/ExpressError");
 const ListingRoute = require("./routes/listing.js");
 const ReviewRoute = require("./routes/review.js");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
@@ -21,6 +26,9 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
 
+// const mongoURL = "mongodb://127.0.0.1:27017/wanderlust";
+const ATLASURL = process.env.ATLASDB_URL;
+
 main()
   .then(() => {
     console.log("connection successful");
@@ -30,11 +38,19 @@ main()
   });
 
 async function main() {
-  mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
+  mongoose.connect(ATLASURL);
 }
 
+const store = MongoStore.create({
+  mongoUrl: ATLASURL,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+  touchAfter: 24 * 3600,
+});
 const sessionOptions = {
-  secret: "superSecretCode",
+  store,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
 };
@@ -55,9 +71,8 @@ app.use((req, res, next) => {
   res.locals.currUser = req.user;
   next();
 });
-
 app.get("/", (req, res) => {
-  res.render("./listings/root.ejs");
+  res.render("./listings/home.ejs");
 });
 app.use("/listings", ListingRoute);
 app.use("/listings/:id/reviews", ReviewRoute);

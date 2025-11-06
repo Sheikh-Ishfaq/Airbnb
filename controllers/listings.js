@@ -1,4 +1,5 @@
 const listing = require("../models/listing");
+
 module.exports.index = async (req, res, next) => {
   let allListings = await listing.find({});
   res.render("./listings/index.ejs", { allListings });
@@ -9,9 +10,12 @@ module.exports.renderNewForm = (req, res) => {
 };
 
 module.exports.createListing = async (req, res, next) => {
-  let data = req.body;
-  data.owner = res.locals.currUser;
-  await listing.insertOne(data);
+  let url = req.file.path;
+  let filename = req.file.filename;
+  let newListing = new listing(req.body);
+  newListing.owner = res.locals.currUser;
+  newListing.image = { url, filename };
+  await newListing.save();
   req.flash("success", "Listing added Successfully");
   res.redirect("/listings");
 };
@@ -37,14 +41,22 @@ module.exports.editListing = async (req, res) => {
     req.flash("error", "Listing does not exist");
     res.redirect("/listings");
   }
-  res.render("./listings/edit.ejs", { obj });
+  let originalUrl = obj.image.url;
+  originalUrl = originalUrl.replace("/upload", "/upload/h_300,w_250");
+  console.log(originalUrl);
+  res.render("./listings/edit.ejs", { obj, originalUrl });
 };
 
 module.exports.updateListing = async (req, res) => {
   let { id } = req.params;
-  let obj = await listing.findById(id);
   let newObj = req.body;
-  await listing.findByIdAndUpdate(id, { ...newObj });
+  let obj = await listing.findByIdAndUpdate(id, { ...newObj });
+  if (typeof req.file !== "undefined") {
+    let url = req.file.path;
+    let filename = req.file.filename;
+    obj.image = { url, filename };
+    await obj.save();
+  }
   req.flash("success", "Listing updated");
   res.redirect(`/listings/${id}`);
 };
